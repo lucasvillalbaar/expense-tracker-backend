@@ -13,3 +13,7 @@ func InsertTransaction(ctx context.Context, transaction *transaction.Transaction
 func DeleteTransaction(ctx context.Context, transactionID string) error {
 	return repository.DeleteTransaction(ctx, transactionID)
 }
+
+func UpdateTransaction(ctx context.Context, transaction *transaction.Transaction) error {
+	return repository.UpdateTransaction(ctx, transaction)
+}

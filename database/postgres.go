@@ -59,3 +59,33 @@ func (repo *PostgresRepository) DeleteTransaction(ctx context.Context, transacti
 
 	return nil
 }
+
+func (repo *PostgresRepository) UpdateTransaction(ctx context.Context, transaction *transaction.Transaction) error {
+	query := `UPDATE transactions SET created_at = $2, type = $3, category = $4, description = $5, account = $6, original_amount = $7, currency = $8, base_amount = $9 WHERE id = $1`
+
+	result, err := repo.db.ExecContext(ctx, query,
+		transaction.ID,
+		transaction.CreatedAt,
+		transaction.Type,
+		transaction.Category,
+		transaction.Description,
+		transaction.Account,
+		transaction.OriginalAmount,
+		transaction.Currency,
+		transaction.BaseAmount,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to update transaction (UpdateTransaction): %v", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to get rows affected (UpdateTransaction): %v", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("transaction not found")
+	}
+
+	return nil
+}
