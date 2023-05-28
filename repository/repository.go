@@ -16,6 +16,8 @@ type Repository interface {
 	InsertCurrency(ctx context.Context, currency *transaction.Currency) error
 	// Accounts
 	InsertAccount(ctx context.Context, account *transaction.Account) error
+	DeleteAccount(ctx context.Context, accountID string) error
+	UpdateAccount(ctx context.Context, account *transaction.Account) error
 	// Categories
 	InsertCategory(ctx context.Context, category *transaction.Category) error
 }
