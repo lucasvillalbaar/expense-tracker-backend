@@ -24,6 +24,10 @@ type Repository interface {
 	InsertCategory(ctx context.Context, category *transaction.Category) error
 	DeleteCategory(ctx context.Context, categoryID string) error
 	UpdateCategory(ctx context.Context, category *transaction.Category) error
+	// Transfers
+	InsertTransfer(ctx context.Context, transfer *transaction.Transfer) error
+	DeleteTransfer(ctx context.Context, transferID string) error
+	UpdateTransfer(ctx context.Context, transfer *transaction.Transfer) error
 }
 
 var repository Repository
