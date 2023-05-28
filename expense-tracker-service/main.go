@@ -24,6 +24,8 @@ func newRouter() (router *mux.Router) {
 	router.HandleFunc("/transactions/{id}", api.DeleteTransactionHandler).Methods(http.MethodDelete)
 	router.HandleFunc("/transactions", api.UpdateTransactionHandler).Methods(http.MethodPut)
 	router.HandleFunc("/currencies", api.CreateCurrencyHandler).Methods(http.MethodPost)
+	router.HandleFunc("/currencies/{id}", api.DeleteCurrencyHandler).Methods(http.MethodDelete)
+	router.HandleFunc("/currencies", api.UpdateCurrencyHandler).Methods(http.MethodPut)
 	router.HandleFunc("/accounts", api.CreateAccountHandler).Methods(http.MethodPost)
 	router.HandleFunc("/accounts/{id}", api.DeleteAccountHandler).Methods(http.MethodDelete)
 	router.HandleFunc("/accounts", api.UpdateAccountHandler).Methods(http.MethodPut)
