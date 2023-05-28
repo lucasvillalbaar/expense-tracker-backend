@@ -10,6 +10,7 @@ type Repository interface {
 	Close()
 	InsertTransaction(ctx context.Context, transaction *transaction.Transaction) error
 	InsertCurrency(ctx context.Context, currency *transaction.Currency) error
+	InsertAccount(ctx context.Context, account *transaction.Account) error
 }
 
 var repository Repository
