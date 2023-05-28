@@ -22,6 +22,8 @@ type Repository interface {
 	UpdateAccount(ctx context.Context, account *transaction.Account) error
 	// Categories
 	InsertCategory(ctx context.Context, category *transaction.Category) error
+	DeleteCategory(ctx context.Context, categoryID string) error
+	UpdateCategory(ctx context.Context, category *transaction.Category) error
 }
 
 var repository Repository

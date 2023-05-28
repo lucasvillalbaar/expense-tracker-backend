@@ -30,6 +30,9 @@ func newRouter() (router *mux.Router) {
 	router.HandleFunc("/accounts/{id}", api.DeleteAccountHandler).Methods(http.MethodDelete)
 	router.HandleFunc("/accounts", api.UpdateAccountHandler).Methods(http.MethodPut)
 	router.HandleFunc("/categories", api.CreateCategoryHandler).Methods(http.MethodPost)
+	router.HandleFunc("/categories/{id}", api.DeleteCategoryHandler).Methods(http.MethodDelete)
+	router.HandleFunc("/categories", api.UpdateCategoryHandler).Methods(http.MethodPut)
+
 	return
 }
 
