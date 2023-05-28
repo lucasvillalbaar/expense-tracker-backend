@@ -48,3 +48,14 @@ func (repo *PostgresRepository) InsertTransaction(ctx context.Context, transacti
 
 	return nil
 }
+
+func (repo *PostgresRepository) DeleteTransaction(ctx context.Context, transactionID string) error {
+	query := `DELETE FROM transactions WHERE id = $1`
+
+	_, err := repo.db.ExecContext(ctx, query, transactionID)
+	if err != nil {
+		return fmt.Errorf("failed to delete transaction (DeleteTransaction): %v", err)
+	}
+
+	return nil
+}

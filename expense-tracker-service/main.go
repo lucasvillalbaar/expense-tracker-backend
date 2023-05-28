@@ -21,8 +21,10 @@ type Config struct {
 func newRouter() (router *mux.Router) {
 	router = mux.NewRouter()
 	router.HandleFunc("/transactions", api.CreateTransactionHandler).Methods(http.MethodPost)
+	router.HandleFunc("/transactions/{id}", api.DeleteTransactionHandler).Methods(http.MethodDelete)
 	router.HandleFunc("/currencies", api.CreateCurrencyHandler).Methods(http.MethodPost)
 	router.HandleFunc("/accounts", api.CreateAccountHandler).Methods(http.MethodPost)
+	router.HandleFunc("/categories", api.CreateCategoryHandler).Methods(http.MethodPost)
 	return
 }
 

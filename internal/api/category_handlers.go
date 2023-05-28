@@ -1,0 +1,47 @@
+package api
+
+import (
+	"encoding/json"
+	"net/http"
+
+	transaction "github.com/lucasvillalbaar/expense-tracker-backend/pkg/transactions"
+	"github.com/lucasvillalbaar/expense-tracker-backend/repository"
+	"github.com/segmentio/ksuid"
+)
+
+type CreateCategoryRequest struct {
+	ID              string `json:"id"`
+	CategoryName    string `json:"category_name"`
+	SubcategoryName string `json:"subcategory_name"`
+}
+
+func CreateCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	var req CreateCategoryRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	id, err := ksuid.NewRandom()
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	category := transaction.Category{
+		ID:              id.String(),
+		CategoryName:    req.CategoryName,
+		SubcategoryName: req.SubcategoryName,
+	}
+
+	if err := repository.InsertCategory(r.Context(), &category); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(&category)
+}

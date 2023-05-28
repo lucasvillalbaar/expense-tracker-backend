@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/mux"
 	transaction "github.com/lucasvillalbaar/expense-tracker-backend/pkg/transactions"
 	"github.com/lucasvillalbaar/expense-tracker-backend/repository"
 	"github.com/segmentio/ksuid"
@@ -56,4 +57,16 @@ func CreateTransactionHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(&tx)
+}
+
+func DeleteTransactionHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	transactionID := params["id"]
+
+	if err := repository.DeleteTransaction(r.Context(), transactionID); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
