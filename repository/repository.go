@@ -9,6 +9,7 @@ import (
 type Repository interface {
 	Close()
 	InsertTransaction(ctx context.Context, transaction *transaction.Transaction) error
+	InsertCurrency(ctx context.Context, currency *transaction.Currency) error
 }
 
 var repository Repository
