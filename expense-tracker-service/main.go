@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/lucasvillalbaar/expense-tracker-backend/database"
+	"github.com/lucasvillalbaar/expense-tracker-backend/internal/api"
 	"github.com/lucasvillalbaar/expense-tracker-backend/repository"
 )
 
@@ -19,7 +20,7 @@ type Config struct {
 
 func newRouter() (router *mux.Router) {
 	router = mux.NewRouter()
-	router.HandleFunc("/feeds", createTransactionHandler).Methods(http.MethodPost)
+	router.HandleFunc("/transactions", api.CreateTransactionHandler).Methods(http.MethodPost)
 	return
 }
 

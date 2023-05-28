@@ -6,8 +6,7 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
-
-	"github.com/lucasvillalbaar/expense-tracker-backend/models"
+	transaction "github.com/lucasvillalbaar/expense-tracker-backend/pkg/transactions"
 )
 
 type PostgresRepository struct {
@@ -28,7 +27,7 @@ func (repo *PostgresRepository) Close() {
 	repo.db.Close()
 }
 
-func (repo *PostgresRepository) InsertTransaction(ctx context.Context, transaction *models.Transaction) error {
+func (repo *PostgresRepository) InsertTransaction(ctx context.Context, transaction *transaction.Transaction) error {
 	query := `INSERT INTO transactions (id, created_at, type, category, description, account, original_amount, currency, base_amount)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
 
@@ -44,7 +43,7 @@ func (repo *PostgresRepository) InsertTransaction(ctx context.Context, transacti
 		transaction.BaseAmount,
 	)
 	if err != nil {
-		return fmt.Errorf("failed to insert expense transaction: %v", err)
+		return fmt.Errorf("failed to insert expense transaction (InsertTransaction): %v", err)
 	}
 
 	return nil

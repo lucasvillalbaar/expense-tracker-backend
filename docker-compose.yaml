@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  postgres:
+    build: './database'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: mydb
+    restart: always
+    ports:
+      - "5432"
+  expense-tracker:
+    build: "."
+    command: "expense-tracker-service"
+    depends_on:
+      - "postgres"
+    ports:
+      - "8080"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: mydb

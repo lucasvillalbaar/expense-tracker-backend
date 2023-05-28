@@ -1,31 +1,62 @@
-CREATE TABLE IF NOT EXISTS transaction_types (
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS transfers;
+DROP TABLE IF EXISTS transaction_types;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS currencies;
+DROP TABLE IF EXISTS accounts;
+
+CREATE TABLE transaction_types (
     id   VARCHAR(255) PRIMARY KEY,
     type VARCHAR(255),
     name VARCHAR(255) UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS categories (
-    id               VARCHAR(255),
+INSERT INTO transaction_types (id, type, name)
+VALUES
+    ('C', 'Credit', 'Crédito'),
+    ('D', 'Debit', 'Débito'),
+    ('T', 'Transfer', 'Transferencia');
+
+CREATE TABLE categories (
+    id               VARCHAR(255) PRIMARY KEY,
     category_name    VARCHAR(255),
     subcategory_name VARCHAR(255),
     CONSTRAINT unique_category_subcategory UNIQUE (category_name, subcategory_name)
 );
 
-CREATE TABLE IF NOT EXISTS currencies (
+INSERT INTO categories (id, category_name, subcategory_name)
+VALUES
+    ('1', 'Ingreso', 'Salario'),
+    ('2', 'Compras', 'Electrónicos'),
+    ('3', 'Hogar', 'Luz');
+
+CREATE TABLE currencies (
     id     VARCHAR(255) PRIMARY KEY,
     name   VARCHAR(255) UNIQUE,
-    symbol VARCHAR(255),
+    symbol VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS accounts (
+INSERT INTO currencies (id, name, symbol)
+VALUES
+    ('USD', 'US Dollar', 'u$d'),
+    ('ARS', 'Peso Argentino', '$'),
+    ('USDT', 'Theter', 'USDT');
+
+CREATE TABLE accounts (
     id       VARCHAR(255) PRIMARY KEY,
     type     VARCHAR(255),
     name     VARCHAR(255) UNIQUE,
-    balance  DECIMAL(18, 2),
-    currency VARCHAR(255)
+    balance  DECIMAL(18, 6),
+    currency VARCHAR(255),
+    FOREIGN KEY (currency) REFERENCES currencies (id)
 );
 
-CREATE TABLE IF NOT EXISTS transactions (
+INSERT INTO accounts (id, type, name, balance, currency)
+VALUES
+    ('BRUARS', 'Cuenta Bancaria', 'Brubank (ARS)', 0.00, 'ARS'),
+    ('BRUUSD', 'Cuenta Bancaria', 'Brubank (USD)', 0.00, 'USD');
+
+CREATE TABLE transactions (
     id              VARCHAR(255) PRIMARY KEY,
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     type            VARCHAR(255),
@@ -39,7 +70,7 @@ CREATE TABLE IF NOT EXISTS transactions (
     FOREIGN KEY (category) REFERENCES categories (id)
 );
 
-CREATE TABLE IF NOT EXISTS transfers (
+CREATE TABLE transfers (
     id                  VARCHAR(255) PRIMARY KEY,
     created_at          TIMESTAMP NOT NULL DEFAULT NOW(),
     source_account      VARCHAR(255),

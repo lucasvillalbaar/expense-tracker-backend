@@ -3,12 +3,12 @@ package repository
 import (
 	"context"
 
-	"github.com/lucasvillalbaar/expense-tracker-backend/models"
+	transaction "github.com/lucasvillalbaar/expense-tracker-backend/pkg/transactions"
 )
 
 type Repository interface {
 	Close()
-	InsertTransaction(ctx context.Context, transaction *models.Transaction) error
+	InsertTransaction(ctx context.Context, transaction *transaction.Transaction) error
 }
 
 var repository Repository
@@ -21,6 +21,6 @@ func Close() {
 	repository.Close()
 }
 
-func InsertTransaction(ctx context.Context, transaction *models.Transaction) error {
+func InsertTransaction(ctx context.Context, transaction *transaction.Transaction) error {
 	return repository.InsertTransaction(ctx, transaction)
 }

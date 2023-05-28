@@ -1,16 +1,16 @@
-package main
+package api
 
 import (
 	"encoding/json"
 	"net/http"
 	"time"
 
-	"github.com/lucasvillalbaar/expense-tracker-backend/models"
+	transaction "github.com/lucasvillalbaar/expense-tracker-backend/pkg/transactions"
 	"github.com/lucasvillalbaar/expense-tracker-backend/repository"
 	"github.com/segmentio/ksuid"
 )
 
-type createTransactionRequest struct {
+type CreateTransactionRequest struct {
 	CreatedAt      time.Time `json:"created_at"`
 	Type           string    `json:"type"`
 	Category       string    `json:"category"`
@@ -20,8 +20,8 @@ type createTransactionRequest struct {
 	Currency       string    `json:"currency"`
 }
 
-func createTransactionHandler(w http.ResponseWriter, r *http.Request) {
-	var req createTransactionRequest
+func CreateTransactionHandler(w http.ResponseWriter, r *http.Request) {
+	var req CreateTransactionRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -37,7 +37,7 @@ func createTransactionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	feed := models.Transaction{
+	tx := transaction.Transaction{
 		ID:             id.String(),
 		CreatedAt:      createdAt,
 		Type:           req.Type,
@@ -48,12 +48,12 @@ func createTransactionHandler(w http.ResponseWriter, r *http.Request) {
 		Currency:       req.Currency,
 	}
 
-	if err := repository.InsertTransaction(r.Context(), &feed); err != nil {
+	if err := repository.InsertTransaction(r.Context(), &tx); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&feed)
+	json.NewEncoder(w).Encode(&tx)
 }
