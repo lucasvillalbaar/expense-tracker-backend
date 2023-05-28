@@ -20,7 +20,3 @@ func SetRepository(r Repository) {
 func Close() {
 	repository.Close()
 }
-
-func InsertTransaction(ctx context.Context, transaction *transaction.Transaction) error {
-	return repository.InsertTransaction(ctx, transaction)
-}
